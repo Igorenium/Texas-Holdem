@@ -13,11 +13,9 @@ public class HandStatistics {
     private int maxNumCardsWithSameRating;
     private int maxNumCardsWithSameSuit;
     private int numPairs;
-
     private int lengthOfStraight = 1;
 
     private Rating highestRating;
-
     private Rating ratingOfQuad;
     private Rating ratingOfSet;
     private Rating ratingOfHighestPair;

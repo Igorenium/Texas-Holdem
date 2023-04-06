@@ -5,6 +5,7 @@ import ru.kartashov.card.CardParser;
 import ru.kartashov.card.CardValidator;
 import ru.kartashov.card.comparator.*;
 
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.Set;
 
@@ -15,6 +16,7 @@ public class PokerHand implements Comparable<PokerHand> {
 
     private final CardValidator cardValidator = new CardValidator();
     private final CardParser cardParser = new CardParser();
+    private final ComparatorFactory comparatorFactory = new ComparatorFactory();
 
     public PokerHand(String hand) {
         String[] cards = hand.split(" ");
@@ -33,28 +35,8 @@ public class PokerHand implements Comparable<PokerHand> {
 
     @Override
     public int compareTo(PokerHand o) {
-        if (handStat.hasStraightFlash() || o.getHandStat().hasStraightFlash())
-            return new StraightFlushComparator().compare(handStat, o.getHandStat());
-
-        if (handStat.hasFourOfKind() || o.getHandStat().hasFourOfKind())
-            return new FourOfKindComparator().compare(handStat, o.getHandStat());
-
-        if (handStat.hasFullHouse() || o.getHandStat().hasFullHouse())
-            return new FullHouseComparator().compare(handStat, o.getHandStat());
-
-        if (handStat.hasFlush() || o.getHandStat().hasFlush())
-            return new FlushComparator().compare(handStat, o.getHandStat());
-
-        if (handStat.hasStraight() || o.getHandStat().hasStraight())
-            return new StraightComparator().compare(handStat, o.getHandStat());
-
-        if (handStat.hasThreeOfKind() || o.getHandStat().hasThreeOfKind())
-            return new ThreeOfKindComparator().compare(handStat, o.getHandStat());
-
-        if (handStat.hasTwoPairs() || o.getHandStat().hasTwoPairs())
-            return new TwoPairsComparator().compare(handStat, o.getHandStat());
-
-        return new HighCardComparator().compare(handStat, o.getHandStat());
+        Comparator<HandStatistics> comparator = comparatorFactory.getComparator(handStat, o.getHandStat());
+        return comparator.compare(handStat, o.getHandStat());
     }
 
     @Override
